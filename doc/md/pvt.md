@@ -52,7 +52,7 @@
 
 |Name|Type|Description|
 |---|---|---|
-|&lt;param&gt;|table|input keyed table|
+|kt|table|input keyed table|
 
 **Returns:**
 
@@ -63,10 +63,45 @@
 **Example:**
 
 ```q
- N:1000;
- .pvt.pivot select sum v by k, p from
-      ([] k: N?.z.D + til 10; p: N?`1; v: N?10)
+ N: 1000;
+
+ .pvt.pivot select sum v by date, p from
+      ([] date: N?.z.D + til 10; p: N?`1; v: N?10)
 
  .Q.id .pvt.pivot select sum v by k, d from
       ([] k: N?`1; d: N?.z.D + til 5; v: N?10)
+```
+
+## .pvt.pivotWithTotal
+
+ This function is a projection of pivotWithTotalGen setting the last parameter to `All`
+
+## .pvt.pivotWithTotalGen
+
+ Function returns the pivot table extended by a total column and a total row.
+
+
+**Parameters:**
+
+|Name|Type|Description|
+|---|---|---|
+|fn|(dict) -> keyed table|an unary function that accepts a dictionary of groupbys and returns a keyed table. Typically, this is a projection of a functional select omitting the third parameter.|
+|grp|dict|dictionary of groupbys|
+|allname|symbol|name of the total column|
+
+**Returns:**
+
+|Type|Description|
+|---|---|
+|keyed table|pivot table extended by total column and total row|
+
+**Example:**
+
+```q
+ N: 1000;
+ t: ([] date: N?.z.D + til 10; p: N?`1; v: N?10);
+
+ .pvt.pivotWithTotalGen[
+    ?[t; (); ; enlist[`median_v]!enlist (med; `v)];
+    `date`p!`date`p; `ALL]
 ```

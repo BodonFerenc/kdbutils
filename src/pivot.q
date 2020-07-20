@@ -53,12 +53,13 @@ getColNameFn: {[l]
 // @fileoverview Function returns the pivot of a keyed table setting the pivot column to the last key column.
 //
 // Pass the output to [.Q.id](https://code.kx.com/q/ref/dotq/#qid-sanitize) to get sanitized column names if you would like to process the output in a safe way.
-// @param {table} input keyed table
+// @param kt {keyed table} input keyed table
 // @returns {keyed table} the keyed table derived from the input table
 // @example
-// N:1000;
-// .pvt.pivot select sum v by k, p from
-//      ([] k: N?.z.D + til 10; p: N?`1; v: N?10)
+// N: 1000;
+//
+// .pvt.pivot select sum v by date, p from
+//      ([] date: N?.z.D + til 10; p: N?`1; v: N?10)
 //
 // .Q.id .pvt.pivot select sum v by k, d from
 //      ([] k: N?`1; d: N?.z.D + til 5; v: N?10)
@@ -66,5 +67,31 @@ pivot: {[kt]
     piv[kt; -1 _ cols key kt; last cols key kt; first cols value kt;
         getColNameFn last value flip key kt; g]
   };
+
+// @kind function
+// @fileoverview Function returns the pivot table extended by a total column and a total row.
+//
+// @param fn {(dict) -> keyed table} an unary function that accepts a dictionary of groupbys and returns a keyed table. Typically, this is a projection of a functional select omitting the third parameter.
+// @param grp {dict} dictionary of groupbys
+// @param allname {symbol} name of the total column
+// @returns {keyed table} pivot table extended by total column and total row
+// @example
+// N: 1000;
+// t: ([] date: N?.z.D + til 10; p: N?`1; v: N?10);
+//
+// .pvt.pivotWithTotalGen[
+//    ?[t; (); ; enlist[`median_v]!enlist (med; `v)];
+//    `date`p!`date`p; `ALL]
+pivotWithTotalGen: {[fn; grps; allname]
+  data: pivot fn grps;
+  tUpper: ((`$string key data)!value data) ,' allname xcol value fn -1 _ grps;   // upper part, key columns are converted to symbol
+  tTotalCol: fn -1 # grps;                                                       // bottom excl. grand total
+  tGrandTotal: fn 0b;                                                            // bottom right, i.e. grand total
+  :tUpper, (enlist (-1 _ key grps)!(-1 + count grps)#allname)!(enlist first[value flip key tTotalCol]!first value flip value tTotalCol) ,' allname xcol tGrandTotal
+  };
+
+// @kind function
+// @fileoverview This function is a projection of pivotWithTotalGen setting the last parameter to `All`
+pivotWithTotal: pivotWithTotalGen[;; `All];
 
 system "d ."
