@@ -73,7 +73,7 @@ pivot: {[kt]
 //
 // @param fn {(dict) -> keyed table} an unary function that accepts a dictionary of groupbys and returns a keyed table. Typically, this is a projection of a functional select omitting the third parameter.
 // @param grp {dict} dictionary of groupbys
-// @param allname {symbol} name of the total column
+// @param allname {symbol} name of the total column, e.g. `Total` or `All`
 // @returns {keyed table} pivot table extended by total column and total row
 // @example
 // N: 1000;
@@ -81,7 +81,7 @@ pivot: {[kt]
 //
 // .pvt.pivotWithTotalGen[
 //    ?[t; (); ; enlist[`median_v]!enlist (med; `v)];
-//    `date`p!`date`p; `ALL]
+//    `date`p!`date`p; `Total]
 pivotWithTotalGen: {[fn; grps; allname]
   data: pivot fn grps;
   tUpper: ((`$string key data)!value data) ,' allname xcol value fn -1 _ grps;   // upper part, key columns are converted to symbol
@@ -91,7 +91,7 @@ pivotWithTotalGen: {[fn; grps; allname]
   };
 
 // @kind function
-// @fileoverview This function is a projection of pivotWithTotalGen setting the last parameter to `All`
-pivotWithTotal: pivotWithTotalGen[;; `All];
+// @fileoverview This function is a projection of pivotWithTotalGen setting the last parameter to `Total`
+pivotWithTotal: pivotWithTotalGen[;; `Total];
 
 system "d ."

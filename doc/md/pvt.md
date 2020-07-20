@@ -52,7 +52,7 @@
 
 |Name|Type|Description|
 |---|---|---|
-|kt|table|input keyed table|
+|kt|keyed table|input keyed table|
 
 **Returns:**
 
