@@ -74,7 +74,7 @@
 
 ## .pvt.pivotWithTotal
 
- This function is a projection of pivotWithTotalGen setting the last parameter to `All`
+ This function is a projection of pivotWithTotalGen setting the last parameter to `Total`
 
 ## .pvt.pivotWithTotalGen
 
@@ -87,7 +87,7 @@
 |---|---|---|
 |fn|(dict) -> keyed table|an unary function that accepts a dictionary of groupbys and returns a keyed table. Typically, this is a projection of a functional select omitting the third parameter.|
 |grp|dict|dictionary of groupbys|
-|allname|symbol|name of the total column|
+|allname|symbol|name of the total column, e.g. `Total` or `All`|
 
 **Returns:**
 
@@ -103,5 +103,5 @@
 
  .pvt.pivotWithTotalGen[
     ?[t; (); ; enlist[`median_v]!enlist (med; `v)];
-    `date`p!`date`p; `ALL]
+    `date`p!`date`p; `Total]
 ```
