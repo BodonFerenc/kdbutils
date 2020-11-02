@@ -8,7 +8,7 @@
 
 |Name|Type|Description|
 |---|---|---|
-|||x typically a large table/list/map or anything that spans over many lines.|
+|x|table\|list\|map|Anything that spans over many lines.|
 
 ## inf
 
@@ -18,4 +18,4 @@
 
 |Name|Type|Description|
 |---|---|---|
-|||x scalar or list. Nested lists are handled properly|
+|x|scalar\|list|Nested lists are handled properly|
