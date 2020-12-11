@@ -87,7 +87,7 @@ pivotWithTotalGen: {[fn; grps; allname]
   tUpper: ((`$string key data)!value data) ,' allname xcol value fn -1 _ grps;   // upper part, key columns are converted to symbol
   tTotalCol: fn -1 # grps;                                                       // bottom excl. grand total
   tGrandTotal: fn 0b;                                                            // bottom right, i.e. grand total
-  :tUpper, (enlist (-1 _ key grps)!(-1 + count grps)#allname)!(enlist first[value flip key tTotalCol]!first value flip value tTotalCol) ,' allname xcol tGrandTotal
+  :tUpper, (enlist (-1 _ key grps)!(-1 + count grps)#allname)!(enlist first[value flip `$string key tTotalCol]!first value flip value tTotalCol) ,' allname xcol tGrandTotal
   };
 
 // @kind function
